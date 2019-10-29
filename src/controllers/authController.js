@@ -1,5 +1,14 @@
 const User = require('../models/user');
-const bcryptjs =require('bcryptjs');
+const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const authConfig = require('../config/auth');
+
+function generateToken(params = {}) {
+    return jwt.sign(params, authConfig.secret, {
+        expiresIn:86400,        
+    });
+}
+
 module.exports = {
     async register(req, res){
         try {
@@ -10,7 +19,10 @@ module.exports = {
             const user = await User.create(req.body);
             user.password = undefined;
             
-            return res.json(user);
+            return res.send({
+                user,
+                token: generateToken({id:user.id}),
+            });
         } catch (error) {
             return res.status(400).send({error:'Registration Failed'});
         }
@@ -25,6 +37,9 @@ module.exports = {
             return res.status(400).send({error:'Invalid Password'});
         }
         user.password = undefined;
-        res.send({user});
+        res.send({
+            user,
+            token: generateToken({id:user.id}),
+        });
     }
 }
