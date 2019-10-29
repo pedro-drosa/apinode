@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(routes);
 
-mongoose.connect('mongodb+srv://myusername:mypassword@cluster0-mzspv.mongodb.net/test?retryWrites=true&w=majority',{
+mongoose.connect('mongodb+srv://myusername:mypassword@cluster0-mzspv.mongodb.net/nodeapi?retryWrites=true&w=majority',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
